@@ -10,7 +10,8 @@ socket.on('disconnect', function() {
 
 socket.on('sendInfo', function(data) {
   console.log('Send info', data);
-  $('#rival-data').html('<b>X Coordinate</b>: ' + data.pointX + '<br><b>Y Coordinate</b>: ' + data.pointY + '<br><b>Score</b>: ' + data.score);
+  $('#rival_name').text(data.pointX + ' ' + data.pointY);
+  $('#compte-2').text(data.score);
 });
 
 socket.on('notification', function(data) {
@@ -25,6 +26,8 @@ $('#rival-data-form').on('submit', function (e) {
     pointY: $('[name=point-y]').val(),
     score: $('[name=score]').val()
   }, function() {
-
+    $('[name=point-x]').val('');
+    $('[name=point-y]').val('');
+    $('[name=score]').val('');
   });
 });

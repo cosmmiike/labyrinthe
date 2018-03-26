@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LABYRINTHE App</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <p>Bienvenue sur LE LABYRINTHE !</p>
+  <div class="header-wrap">
+		<h1>LABYRINTHE</h1>
+	</div>
 
   <form id="rival-data-form" method="post">
     <input type="text" name="point-x" placeholder="X Coordinate">
@@ -19,8 +21,60 @@
 
   <div id="rival-data"></div>
 
+	<div class="wrap">
+		<div class="game">
+			<div class="infopanel">
+				<h2>JOUEUR 1</h2>
+				<h3>VOUS</h3>
+				<span id="compte-1" class="compte">0</span>
+				<span class="compte-souligne">points</span>
+				<div class="progress-bar">
+					<div id="bar-1" class="cur-progess-line">
+						<span></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="labyrinthe">
+				<canvas id="canvas"></canvas>
+				<img id="face" src="img/face1.png">
+				<div class="control-buttons">
+					<div class="ctrl-btn-row">
+						<div class="ctrl-btn-hidden"><span></span></div>
+						<div class="ctrl-btn" id="btnup"></div>
+						<div class="ctrl-btn-hidden"><span></span></div>
+					</div>
+					<div class="ctrl-btn-row">
+						<div class="ctrl-btn" id="btnleft"></div>
+						<div class="ctrl-btn" id="btndown"></div>
+						<div class="ctrl-btn" id="btnright"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="infopanel">
+				<h2>JOUEUR 2</h2>
+				<h3 id="rival_name">RIVAL</h3>
+				<span id="compte-2" class="compte">0</span>
+				<span class="compte-souligne">points</span>
+				<div class="progress-bar">
+					<div id="bar-2" class="cur-progess-line">
+						<span></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="btn-wrap">
+		<button type="button" name="button" id="restart">RESTART</button>
+	</div>
+	<div class="copyright">
+		<span><b>Mikhail Shaymardanov</b> - Ecole Centrale de Lyon - 2018</span>
+	</div>
+
   <script type="text/javascript" src="socket.io/socket.io.js"></script>
   <script type="text/javascript" src="js/libs/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/game.js"></script>
 </body>
 </html>
