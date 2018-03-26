@@ -10,8 +10,19 @@ var server = http.createServer(app);
 var io = socketIO(server);
 
 app.use(express.static(publicPath));
+
 io.on('connection', function(socket) {
   console.log('New user connected');
+
+  socket.emit('sendInfo', {
+      pointX: 102,
+      pointY: 217,
+      score: 1230
+    });
+
+    socket.on('getInfo', function(data) {
+      console.log('Get info', data);
+    });
 
   socket.on('disconnect', function() {
     console.log('User was disconnected');
@@ -19,5 +30,5 @@ io.on('connection', function(socket) {
 });
 
 server.listen(port, function() {
-  console.log('Server is up on port' + port);
+  console.log('Server is up on port ' + port);
 });
