@@ -11,3 +11,7 @@ socket.on('disconnect', function() {
 socket.on('sendInfo', function(data) {
   console.log('Send info', data);
 });
+
+socket.on('notification', function(data) {
+  console.log('Notification', data);
+});
