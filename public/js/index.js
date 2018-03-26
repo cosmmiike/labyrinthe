@@ -2,12 +2,6 @@ var socket = io();
 
 socket.on('connect', function() {
   console.log('Connected to server');
-
-  socket.emit('getInfo', {
-    pointX: 552,
-    pointY: 34,
-    score: 836
-  });
 });
 
 socket.on('disconnect', function() {

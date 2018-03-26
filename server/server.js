@@ -14,15 +14,14 @@ app.use(express.static(publicPath));
 io.on('connection', function(socket) {
   console.log('New user connected');
 
-  socket.emit('sendInfo', {
-      pointX: 102,
-      pointY: 217,
-      score: 1230
+  socket.on('getInfo', function(data) {
+    console.log('Get info', data);
+    io.emit('sendInfo', {
+      pointX: data.pointX,
+      pointY: data.pointY,
+      score: data.score
     });
-
-    socket.on('getInfo', function(data) {
-      console.log('Get info', data);
-    });
+  });
 
   socket.on('disconnect', function() {
     console.log('User was disconnected');
