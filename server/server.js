@@ -19,9 +19,10 @@ io.on('connection', function(socket) {
   socket.emit('notification', generateNotification('Welcome to the LABYRINTHE App'));
   socket.broadcast.emit('notification', generateNotification('New user joined'));
 
-  socket.on('getInfo', function(data) {
+  socket.on('getInfo', function(data, callback) {
     console.log('Get info', data);
     io.emit('sendInfo', generateData(data.pointX, data.pointY, data.score));
+    callback('This is from the server');
   });
 
   socket.on('disconnect', function() {

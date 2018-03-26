@@ -4,3 +4,7 @@ p {
   font-size: 50px;
   text-align: center;
 }
+
+#rival-data, form {
+  text-align: center;
+}

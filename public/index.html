@@ -10,7 +10,17 @@
 <body>
   <p>Bienvenue sur LE LABYRINTHE !</p>
 
+  <div id="rival-data"></div>
+
+  <form id="rival-data-form" method="post">
+    <input type="text" name="point-x" placeholder="X Coordinate">
+    <input type="text" name="point-y" placeholder="Y Coordinate">
+    <input type="text" name="score" placeholder="Score">
+    <button type="submit" name="Send">Envoyer</button>
+  </form>
+
   <script type="text/javascript" src="socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="js/libs/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
