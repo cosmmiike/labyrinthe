@@ -1,4 +1,4 @@
-var expecct = require('expect');
+var expect = require('expect');
 
 var {generateData} = require('./data');
 
@@ -7,7 +7,8 @@ describe('generateData', function() {
     var pointX = 184;
     var pointY = 133;
     var score = 33;
+    var data = generateData(pointX, pointY, score);
 
-    expect(message).toInclude({pointX, pointY, score});
+    expect(data).toInclude({pointX, pointY, score});
   });
 });

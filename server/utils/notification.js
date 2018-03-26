@@ -1,6 +1,6 @@
-var generateNotification = function(notification) {
+var generateNotification = function(text) {
   return {
-    notification,
+    text,
     createdAt: new Date().getTime()
   };
 };

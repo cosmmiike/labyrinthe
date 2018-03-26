@@ -1,4 +1,4 @@
-var expecct = require('expect');
+var expect = require('expect');
 
 var {generateNotification} = require('./notification');
 
