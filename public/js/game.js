@@ -20,6 +20,8 @@ var distmax = 340;
 var compte1 = 0;
 var compte2 = 0;
 
+var buttons = document.getElementsByClassName('ctrl-btn');
+
 function calculateDist(pointx, pointy) {
 	var dist = Math.sqrt((pointx - 164) * (pointx - 164) + (pointy - 308) * (pointy - 308));
 	var pourcentage = 100 - dist/distmax * 100;
@@ -55,7 +57,7 @@ function drawMaze(mazeFile, startingX, startingY){
 		x = startingX;
 		y = startingY;
 
-		var imgFace = document.getElementById("face");
+		var imgFace = document.getElementById("face1");
 		context.drawImage(imgFace, x, y);
 		context.stroke();
 
@@ -88,7 +90,7 @@ function drawFrame() {
 		}
 
 		// Перерисовываем значок
-		var imgFace = document.getElementById("face");
+		var imgFace = document.getElementById("face1");
 		context.drawImage(imgFace, x, y);
 
 		// Проверяем дошел ли пользователь до финиша.
@@ -117,6 +119,7 @@ function processKey(e) {
 	var compte1 = document.getElementById("compte-1");
 	// Если нажата стрелка вверх, начинаем двигаться вверх
 	if (e.keyCode == 38) {
+		e.preventDefault();
 		dy = -1;
 		document.getElementById("btnup").style.backgroundColor = "rgba(255, 255, 255, 1)";
 		scoreCounter += 1;
@@ -125,6 +128,7 @@ function processKey(e) {
 
 	// Если нажата стрелка вниз, начинаем двигаться вниз
 	if (e.keyCode == 40) {
+		e.preventDefault();
 		dy = 1;
 		document.getElementById("btndown").style.backgroundColor = "rgba(255, 255, 255, 1)";
 		scoreCounter += 1;
@@ -133,6 +137,7 @@ function processKey(e) {
 
 	// Если нажата стрелка влево, начинаем двигаться влево
 	if (e.keyCode == 37) {
+		e.preventDefault();
 		dx = -1;
 		document.getElementById("btnleft").style.backgroundColor = "rgba(255, 255, 255, 1)";
 		scoreCounter += 1;
@@ -141,6 +146,7 @@ function processKey(e) {
 
 	// Если нажата стрелка вправо, начинаем двигаться вправо
 	if (e.keyCode == 39) {
+		e.preventDefault();
 		dx = 1;
 		document.getElementById("btnright").style.backgroundColor = "rgba(255, 255, 255, 1)";
 		scoreCounter += 1;
@@ -337,6 +343,7 @@ window.onload = function(){
 	function incrementSeconds() {
 		scoreCounter += 1;
 		compte1.innerText = scoreCounter;
+		$('#rival_name').text(x + ' ' + y);
 		// scoreCounter2 += 1;
 		// compte2.innerText = scoreCounter2;
 	}

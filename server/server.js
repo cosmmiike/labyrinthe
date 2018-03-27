@@ -11,13 +11,33 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
+var users = [];
+
 app.use(express.static(publicPath));
 
+
 io.on('connection', function(socket) {
-  console.log('New user connected');
+  // if (io.engine.clientsCount === 1) {
+  //
+  // }
+
+  function updateMaze() {
+    io.sockets.emit('User count', {num: io.engine.clientsCount});
+  }
+
+
+  console.log('New user connected', io.engine.clientsCount);
+  io.emit('User count', {num: io.engine.clientsCount});
+
+  socket.emit('playerNumber', {number: io.engine.clientsCount});
 
   socket.emit('notification', generateNotification('Welcome to the LABYRINTHE App'));
   socket.broadcast.emit('notification', generateNotification('New user joined'));
+
+  socket.on('getMaze', function(num) {
+    console.log('Get maze', num);
+    io.emit('sendMaze', {mazeNumber: num});
+  });
 
   socket.on('getInfo', function(data, callback) {
     console.log('Get info', data);
@@ -26,7 +46,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function() {
-    console.log('User was disconnected');
+    console.log('User was disconnected', io.engine.clientsCount);
+    updateMaze();
   });
 });
 
