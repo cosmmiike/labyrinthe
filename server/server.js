@@ -15,40 +15,25 @@ var users = [];
 
 app.use(express.static(publicPath));
 
-
 io.on('connection', function(socket) {
-  // if (io.engine.clientsCount === 1) {
-  //
-  // }
-
-  function updateMaze() {
-    io.sockets.emit('User count', {num: io.engine.clientsCount});
-  }
-
-
   console.log('New user connected', io.engine.clientsCount);
-  io.emit('User count', {num: io.engine.clientsCount});
+  io.emit('usercount', {num: io.engine.clientsCount});
+  socket.emit('player number', {num: io.engine.clientsCount});
 
-  socket.emit('playerNumber', {number: io.engine.clientsCount});
-
-  socket.emit('notification', generateNotification('Welcome to the LABYRINTHE App'));
-  socket.broadcast.emit('notification', generateNotification('New user joined'));
+  socket.on('disconnect', function() {
+    console.log('User was disconnected', io.engine.clientsCount);
+    io.emit('usercount', {num: io.engine.clientsCount});
+  });
 
   socket.on('getMaze', function(num) {
     console.log('Get maze', num);
     io.emit('sendMaze', {mazeNumber: num});
   });
 
-  socket.on('getInfo', function(data, callback) {
-    console.log('Get info', data);
-    io.emit('sendInfo', generateData(data.pointX, data.pointY, data.score));
-    callback('This is from the server');
+  socket.on('getInfo', function(data) {
+    socket.broadcast.emit('sendInfo', generateData(data.pointX, data.pointY, data.score));
   });
 
-  socket.on('disconnect', function() {
-    console.log('User was disconnected', io.engine.clientsCount);
-    updateMaze();
-  });
 });
 
 server.listen(port, function() {
