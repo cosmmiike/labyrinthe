@@ -18,6 +18,26 @@ p {
   position: absolute;
 }
 
+#rival_point,
+#player_point {
+  display: none;
+  position: absolute;
+  margin-top: 2px;
+  margin-left: 2px;
+  width: 10px;
+  height: 10px;
+  z-index: 1000;
+  border-radius: 5px;
+}
+
+#player_point {
+  background-color: lightblue;
+}
+
+#rival_point {
+  background-color: red;
+}
+
 body {
   overflow-x: hidden;
   font-family: Helvetica, sans-serif;
@@ -103,18 +123,23 @@ h3 {
 
 .labyrinthe {
   height: 550px;
+  width: 322px;
   text-align: center;
   vertical-align: middle;
   display: table-cell;
+
+  /* border: 5px solid yellow; */
 }
 
 .infopanel {
+  min-width: 250px;
   display: table-cell;
-  width: 35%;
   text-align: center;
   vertical-align: top;
   color: white;
   padding-top: 20px;
+
+  /* border: 3px solid blue; */
 }
 
 .compte {

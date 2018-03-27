@@ -23,6 +23,7 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     console.log('User was disconnected', io.engine.clientsCount);
     io.emit('usercount', {num: io.engine.clientsCount});
+    io.emit('hide points', {num: io.engine.clientsCount});
   });
 
   socket.on('getMaze', function(num) {
@@ -31,6 +32,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('getInfo', function(data) {
+    // console.log('Get info', data);
     socket.broadcast.emit('sendInfo', generateData(data.pointX, data.pointY, data.score));
   });
 
