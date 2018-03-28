@@ -31,11 +31,11 @@ p {
 }
 
 #player_point {
-  background-color: lightblue;
+  background-color: #e67e22;
 }
 
 #rival_point {
-  background-color: red;
+  background-color: #3498db;
 }
 
 body {

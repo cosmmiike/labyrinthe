@@ -1,6 +1,7 @@
 var socket = io();
 var player;
 var timer;
+var update_score;
 var buttons = document.getElementsByClassName('ctrl-btn');
 
 class Player {
@@ -36,6 +37,7 @@ window.onload = function(){
   window.onkeyup = processKeyUp;
   controlButtons();
 
+  update_score = setInterval(function() {player.score += 1;}, 100);
 };
 
 function socketListeners() {
@@ -50,12 +52,21 @@ function socketListeners() {
   // Эту функцию заменить позже на комнату из 2 игроков
   socket.on('usercount', function(pnum) {
     console.log('Number of players:', pnum.num);
-    setMaze(pnum.num);
+    if (pnum.num < 3) {
+      setMaze(pnum.num);
+    } else {
+
+    }
   });
 
-  socket.on('hide points', function() {
-    $('#player_point').css('display', 'none');
-    $('#rival_point').css('display', 'none');
+  socket.on('disconnection', function() {
+    clearTimeout(timer);
+    socket.emit('reset coordanates');
+    clearInterval(update_score);
+    $('#player_point').hide();
+    $('#rival_point').hide();
+    $('#compte-1').text(0);
+    $('#compte-2').text(0);
   });
 
   // Эту функцию заменить позже на комнату из 2 игроков
@@ -70,22 +81,35 @@ function socketListeners() {
     renderMaze(maze, player);
   });
 
-  // socket.on('notification', function(data) {
-  //   console.log('Notification', data);
-  // });
+  socket.on('reset', function() {
+    player.x = player.startX;
+    player.y = player.startY;
+    player.score = 0;
+  });
+
+  socket.on('send result', function() {
+    alert("Vouz êtes fini ! SCORE : " + player.score);
+  });
+
+  socket.on('send end message', function(msg) {
+    console.log(msg);
+    alert("Joueur " + msg.player_num + " est fini avec score : " + msg.player_score);
+  });
 }
 
 // Эта функция сработывает по 2 раза когда number === 2 !
 function setMaze(number) {
   if (number === 1) {
     $('#wait-message').show();
-    $('#wait-message').html('VEUILLE ATTENDRE LE JOUEUR 2');
+    $('#wait-message').text('VEUILLE ATTENDRE LE JOUEUR 2');
     $('canvas').hide();
     $('.control-buttons').hide();
+    $('#restart').hide();
   } else if (number === 2) {
     $('#wait-message').hide();
     $('canvas').show();
     $('.control-buttons').show();
+    $('#restart').show();
     maze_num = 1 - 0.5 + Math.random() * (20);
     maze_num = Math.round(maze_num);
     socket.emit('getMaze', {mazeNumber: maze_num, Player: number});
@@ -93,27 +117,37 @@ function setMaze(number) {
 }
 
 function renderPlayer(pointX, pointY) {
-  $('#player_point').css('display', 'block').css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
+  $('#player_point').show().css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
   if (player.number === 1) {
     $('#compte-1').text(player.score);
-  }
-  if (player.number === 2) {
+  } else if (player.number === 2) {
     $('#compte-2').text(player.score);
   }
 }
 
 function renderRival(pointX, pointY) {
-  $('#rival_point').css('display', 'block').css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
+  $('#rival_point').show().css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
 }
 
-function renderMaze(mazeFile, pl) {
+function renderMaze(mazeFile, player) {
+  clearTimeout(timer);
+
   var imgMaze = new Image();
 
 	imgMaze.onload = function() {
+    player.score = 0;
 		canvas.width = imgMaze.width;
 		canvas.height = imgMaze.height;
 
 		context.drawImage(imgMaze, 0,0);
+
+    if (player.number === 1) {
+      $('#j1_name').text('VOUS');
+      $('#j2_name').text('RIVAL');
+    } else if (player.number === 2) {
+      $('#j1_name').text('RIVAL');
+      $('#j2_name').text('VOUS');
+    }
 
 		x1 = player.startX; x2 = player.startX_rival;
     y1 = player.startY; y2 = player.startY_rival;
@@ -129,8 +163,7 @@ function renderMaze(mazeFile, pl) {
         $('#compte-2').text(data.score);
         percentage = 110 - calculateDist(data.pointX, data.pointY);
         $('#bar-2').css('width', percentage + '%');
-      }
-      if (player.number === 2) {
+      } else if (player.number === 2) {
         $('#compte-1').text(data.score);
         renderBar(1, data.pointX, data.pointY);
         percentage = 110 - calculateDist(data.pointX, data.pointY);
@@ -147,7 +180,7 @@ function renderMaze(mazeFile, pl) {
 
 function renderPath() {
 	context.beginPath();
-	context.fillStyle = "rgb(220,255,220)";
+	context.fillStyle = "#ffdddd";
 	context.rect(player.x, player.y, 10, 10);
 	context.fill();
 
@@ -169,38 +202,26 @@ function renderPath() {
   renderPlayer(player.x, player.y);
 
 	if (player.y > (canvas.height - 12) && player.number == 1) {
+    socket.emit('end of maze', {player_num: player.number, player_score: player.score});
 		document.getElementById("bar-1").style.width = "100%";
-		alert("Vouz avez gagné ! SCORE: " + player.score);
-		player.score = 0;
-    $('#compte-1').text(0);
-    $('#compte-2').text(0);
-    player.x = player.startX;
-    player.y = player.startY;
     player.dx = 0;
     player.dy = 0;
 		document.getElementById("btndown").style.backgroundColor = "rgba(255, 255, 255, 0.5)";
-		setMaze(2);
 		return;
 	}
 
-  if (player.y < 2 && player.number == 2) {
-		document.getElementById("bar-1").style.width = "100%";
-		alert("Vouz avez gagné ! SCORE: " + player.score);
-    player.score = 0;
-    $('#compte-1').text(0);
-    $('#compte-2').text(0);
-    player.x = player.startX;
-    player.y = player.startY;
+  if (player.y < 3 && player.number == 2) {
+    socket.emit('end of maze', {player_num: player.number, player_score: player.score});
+		document.getElementById("bar-2").style.width = "100%";
     player.dx = 0;
     player.dy = 0;
 		document.getElementById("btnup").style.backgroundColor = "rgba(255, 255, 255, 0.5)";
-		setMaze(2);
 		return;
 	}
 
   timer = setTimeout(renderPath, 20);
-  update_rival = setTimeout(getInformation(), 10);
-  update_bar = setTimeout(renderBar(player.number, player.x, player.y), 10);
+  update_rival = setTimeout(getInformation(), 20);
+  update_bar = setTimeout(renderBar(player.number, player.x, player.y), 20);
 }
 
 function calculateDist(pointx, pointy) {
@@ -238,7 +259,6 @@ function getInformation() {
 function processKey(e) {
 	// UP
 	if (e.keyCode == 38) {
-    console.log(e);
 		e.preventDefault();
 		player.dy = -1;
 		document.getElementById("btnup").style.backgroundColor = "rgba(255, 255, 255, 1)";
@@ -246,7 +266,6 @@ function processKey(e) {
 
 	// DOWN
 	if (e.keyCode == 40) {
-    console.log('down');
 		e.preventDefault();
 		player.dy = 1;
 		document.getElementById("btndown").style.backgroundColor = "rgba(255, 255, 255, 1)";
@@ -294,10 +313,10 @@ function checkForCollision() {
 }
 
 restart.onclick = function () {
-  player.x = player.startX;
-  player.y = player.startY;
-
+  player.dx = 0;
+	player.dy = 0;
   setMaze(2);
+  socket.emit('reset coordanates');
 };
 
 function controlButtons() {

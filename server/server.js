@@ -16,14 +16,15 @@ var users = [];
 app.use(express.static(publicPath));
 
 io.on('connection', function(socket) {
-  console.log('New user connected', io.engine.clientsCount);
-  io.emit('usercount', {num: io.engine.clientsCount});
-  socket.emit('player number', {num: io.engine.clientsCount});
+  n_users = io.engine.clientsCount;
+  console.log('New user connected', n_users);
+  io.emit('usercount', {num: n_users});
+  socket.emit('player number', {num: n_users});
 
   socket.on('disconnect', function() {
     console.log('User was disconnected', io.engine.clientsCount);
     io.emit('usercount', {num: io.engine.clientsCount});
-    io.emit('hide points', {num: io.engine.clientsCount});
+    io.emit('disconnection');
   });
 
   socket.on('getMaze', function(num) {
@@ -36,6 +37,14 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('sendInfo', generateData(data.pointX, data.pointY, data.score));
   });
 
+  socket.on('reset coordanates', function() {
+    io.emit('reset');
+  });
+
+  socket.on('end of maze', function(data) {
+    socket.emit('send result');
+    socket.broadcast.emit('send end message', data);
+  });
 });
 
 server.listen(port, function() {
