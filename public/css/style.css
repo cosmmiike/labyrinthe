@@ -1,87 +1,29 @@
-p {
-  font-family: sans-serif;
-  font-weight: 600;
-  font-size: 50px;
-  text-align: center;
-}
-
-#rival-data, form {
-  text-align: center;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  margin-left: -180px;
-}
-
-#rival-data-form button {
-  margin-left: 40px;
-  margin-top: -15px;
-  position: absolute;
-}
-
-#rival_point,
-#player_point {
-  display: none;
-  position: absolute;
-  margin-top: 2px;
-  margin-left: 2px;
-  width: 10px;
-  height: 10px;
-  z-index: 1000;
-  border-radius: 5px;
-}
-
-#player_point {
-  background-color: #e67e22;
-}
-
-#rival_point {
-  background-color: #3498db;
-}
-
 body {
   overflow-x: hidden;
-  font-family: Helvetica, sans-serif;
+  font-family: "Helvetica", "Arial", sans-serif;
 }
 
-img {
-  display:none;
-}
+/* Header Style */
 
-h1 {
-  font-family: Helvetica, sans-serif;
-  font-size: 60pt;
-  line-height: 50pt;
+.header {
+  font-size: 80px;
+  line-height: 120px;
   font-weight: 400;
   text-decoration: underline;
-}
-
-h2 {
-  font-family: Helvetica, sans-serif;
-  font-size: 25pt;
-  font-weight: 600;
-  margin-bottom: 0;
-}
-
-h3 {
-  font-family: Helvetica, sans-serif;
-  font-size: 16pt;
-  font-weight: 400;
-  margin-top: 10px;
-}
-
-.header-wrap {
-  display: block;
   text-align: center;
-  margin: auto;
-  padding-top: 30px;
 }
 
-.wrap {
+/* Game Wrap Style */
+
+.game {
+  display: table-row;
+}
+
+.game__wrap {
   display: table;
   width: 100%;
-  vertical-align: middle;
-  top: 50%;
-  margin-top: 0;
+  /* vertical-align: middle; */
+
   background-color: lightblue;
   background: linear-gradient(270deg,
     #1de4b1, #1de46b, #87ee11, #d5ee11,
@@ -92,11 +34,6 @@ h3 {
   -webkit-animation: BackgroundGradient 40s ease infinite;
   -moz-animation: BackgroundGradient 40s ease infinite;
   animation: BackgroundGradient 40s ease infinite;
-}
-
-.game {
-  height: 550px;
-  display: table-row;
 }
 
 @-webkit-keyframes BackgroundGradient {
@@ -115,146 +52,164 @@ h3 {
    100%{background-position:0% 50%}
 }
 
-#wait-message {
-  color: #fff;
-  font-size: 30px;
-  /* height: 300px; */
-}
+/* Infopanel Style */
 
-.labyrinthe {
-  height: 550px;
-  width: 322px;
-  text-align: center;
-  vertical-align: middle;
+.game__infopanel {
   display: table-cell;
-
-  /* border: 5px solid yellow; */
-}
-
-.infopanel {
   min-width: 250px;
-  display: table-cell;
-  text-align: center;
-  vertical-align: top;
-  color: white;
   padding-top: 20px;
-
-  /* border: 3px solid blue; */
+  text-align: center;
+  color: #ffffff;
 }
 
-.compte {
+.game__player-number {
+  font-size: 25pt;
+  font-weight: 600;
+}
+
+.game__player-name {
+  font-size: 16pt;
+  font-weight: 400;
+}
+
+.game__player-score {
   display: block;
   margin-top: 50px;
   font-size: 70pt;
   font-weight: 800;
 }
 
-.compte-souligne {
-  display: block;
-  text-transform: uppercase;
+.game__player-score-text {
   font-size: 16pt;
+  text-transform: uppercase;
 }
 
-.progress-bar {
+.game__progress-bar {
+  width: 50%;
+  height: 3px;
   margin: auto;
   margin-top: 62px;
-  display: block;
-  height: 3px;
-  width: 50%;
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-.cur-progess-line {
+.game__current-progress {
   height: 3px;
   width: 0%;
   background-color: rgba(255, 255, 255, 1);
 }
 
-canvas {
+/* Maze Style */
+
+.game__maze {
+  display: table-cell;
+  height: 550px;
+  width: 322px;
+  vertical-align: middle;
   text-align: center;
 }
 
-.btn-wrap {
-  display: block;
-  margin: auto;
-  line-height: 150px;
+.game__message {
+  font-size: 30px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.game__player-point {
+  position: absolute;
+  z-index: 1000;
+  display: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 2px;
+  margin-left: 2px;
+  border-radius: 5px;
+}
+
+#game__player-point--player {
+  background-color: #e67e22;
+}
+
+#game__player-point--rival {
+  background-color: #3498db;
+}
+
+#game__canvas {
   text-align: center;
 }
 
-button {
-  font-size: 18pt;
-  padding-left: 30px;
-  padding-right: 30px;
-  height: 50px;
-  font-weight: 600;
-  border: 3px solid black;
-  background-color: transparent;
-  transition: all 0.05s ease-out 0.05s;
-  position: static;
-}
-
-button:hover,
-button:active {
-  cursor: pointer;
-  padding-left: 33px;
-  padding-right: 33px;
-  height: 56px;
-}
-
-button:active {
-  color: #ea634d;
-}
-
-.control-buttons {
+.game__control-buttons {
   display: table;
   margin: auto;
   margin-top: 40px;
   border-spacing: 5px;
 }
 
-.ctrl-btn-row {
+.game__control-buttons-row {
   display: table-row;
   height: 30px;
 }
 
-.ctrl-btn {
-  display: table-cell;
-  /* border: 2px solid black; */
-  height: 40px;
-  width: 40px;
-  vertical-align: middle;
-  background-color: rgba(255, 255, 255, 0.5);
+.game__control-button {
+    display: table-cell;
+    height: 40px;
+    width: 40px;
+    vertical-align: middle;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
-.ctrl-btn:hover {
+.game__control-button:hover {
   background-color: rgba(255, 255, 255, 1);
   cursor: pointer;
 }
 
-.ctrl-btn-hidden {
-  height: 40px;
-  width: 40px;
-  border: none;
-  color: transparent;
+#game__control-button--up::before {
+  content: "↑";
+}
+
+#game__control-button--left::before {
+  content: "←";
+}
+
+#game__control-button--down::before {
+  content: "↓";
+}
+
+#game__control-button--right::before {
+  content: "→";
+}
+
+/* Control Panel Style */
+
+.control-panel {
+  line-height: 150px;
+  text-align: center;
+}
+
+.control-panel__button {
+  height: 50px;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 18pt;
+  font-weight: 600;
   background-color: transparent;
-  cursor: default;
+  border: 3px solid #000000;
+  transition: all 0.05s ease-out 0.05s;
+  position: static;
 }
 
-#btnup::before {
-  content: '↑';
+.control-panel__button:hover,
+.control-panel__button:active {
+  height: 56px;
+  padding-left: 33px;
+  padding-right: 33px;
+  cursor: pointer;
 }
 
-#btnleft::before {
-  content: '←';
+.control-panel__button:active {
+  color: #ea634d;
 }
 
-#btndown::before {
-  content: '↓';
-}
-
-#btnright::before {
-  content: '→';
-}
+/* Copyright Style */
 
 .copyright {
   position: fixed;
@@ -266,8 +221,7 @@ button:active {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.copyright span {
-  display: block;
+.copyright__message {
   font-size: 10pt;
   text-align: center;
   color: #808080;

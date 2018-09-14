@@ -2,7 +2,7 @@ var socket = io();
 var player;
 var timer;
 var update_score;
-var buttons = document.getElementsByClassName('ctrl-btn');
+var buttons = document.getElementsByClassName('game__control-button');
 
 class Player {
   constructor(number) {
@@ -28,7 +28,7 @@ class Player {
 }
 
 window.onload = function(){
-	canvas = document.getElementById('canvas');
+	canvas = document.getElementById('game__canvas');
 	context = canvas.getContext('2d');
 
   socketListeners();
@@ -63,10 +63,10 @@ function socketListeners() {
     clearTimeout(timer);
     socket.emit('reset coordanates');
     clearInterval(update_score);
-    $('#player_point').hide();
-    $('#rival_point').hide();
-    $('#compte-1').text(0);
-    $('#compte-2').text(0);
+    $('#game__player-point--player').hide();
+    $('#game__player-point--rival').hide();
+    $('#game__player-score--number--1').text(0);
+    $('#game__player-score--number--2').text(0);
   });
 
   // Эту функцию заменить позже на комнату из 2 игроков
@@ -100,16 +100,16 @@ function socketListeners() {
 // Эта функция сработывает по 2 раза когда number === 2 !
 function setMaze(number) {
   if (number === 1) {
-    $('#wait-message').show();
-    $('#wait-message').text('VEUILLE ATTENDRE LE JOUEUR 2');
-    $('canvas').hide();
-    $('.control-buttons').hide();
-    $('#restart').hide();
+    $('#game__message--wait-message').show();
+    $('#game__message--wait-message').text('VEUILLE ATTENDRE LE JOUEUR 2');
+    $('#game__canvas').hide();
+    $('.game__control-buttons').hide();
+    $('#control-panel__button--name--new-game').hide();
   } else if (number === 2) {
-    $('#wait-message').hide();
-    $('canvas').show();
-    $('.control-buttons').show();
-    $('#restart').show();
+    $('#game__message--wait-message').hide();
+    $('#game__canvas').show();
+    $('.game__control-buttons').show();
+    $('#control-panel__button--name--new-game').show();
     maze_num = 1 - 0.5 + Math.random() * (20);
     maze_num = Math.round(maze_num);
     socket.emit('getMaze', {mazeNumber: maze_num, Player: number});
@@ -117,16 +117,16 @@ function setMaze(number) {
 }
 
 function renderPlayer(pointX, pointY) {
-  $('#player_point').show().css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
+  $('#game__player-point--player').show().css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
   if (player.number === 1) {
-    $('#compte-1').text(player.score);
+    $('#game__player-score--number--1').text(player.score);
   } else if (player.number === 2) {
-    $('#compte-2').text(player.score);
+    $('#game__player-score--number--2').text(player.score);
   }
 }
 
 function renderRival(pointX, pointY) {
-  $('#rival_point').show().css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
+  $('#game__player-point--rival').show().css('margin-left', pointX + 'px').css('margin-top', pointY + 'px');
 }
 
 function renderMaze(mazeFile, player) {
@@ -142,11 +142,11 @@ function renderMaze(mazeFile, player) {
 		context.drawImage(imgMaze, 0,0);
 
     if (player.number === 1) {
-      $('#j1_name').text('VOUS');
-      $('#j2_name').text('RIVAL');
+      $('#game__player-name--number--1').text('VOUS');
+      $('#game__player-name--number--2').text('RIVAL');
     } else if (player.number === 2) {
-      $('#j1_name').text('RIVAL');
-      $('#j2_name').text('VOUS');
+      $('#game__player-name--number--1').text('RIVAL');
+      $('#game__player-name--number--2').text('VOUS');
     }
 
 		x1 = player.startX; x2 = player.startX_rival;
@@ -160,14 +160,14 @@ function renderMaze(mazeFile, player) {
       var y_rival = data.pointY;
 
       if (player.number === 1) {
-        $('#compte-2').text(data.score);
+        $('#game__player-score--number--2').text(data.score);
         percentage = 110 - calculateDist(data.pointX, data.pointY);
-        $('#bar-2').css('width', percentage + '%');
+        $('#game__current-progress--number--2').css('width', percentage + '%');
       } else if (player.number === 2) {
-        $('#compte-1').text(data.score);
+        $('#game__player-score--number--1').text(data.score);
         renderBar(1, data.pointX, data.pointY);
         percentage = 110 - calculateDist(data.pointX, data.pointY);
-        $('#bar-1').css('width', percentage + '%');
+        $('#game__current-progress--number--1').css('width', percentage + '%');
       }
 
       renderRival(data.pointX, data.pointY);
@@ -203,19 +203,19 @@ function renderPath() {
 
 	if (player.y > (canvas.height - 12) && player.number == 1) {
     socket.emit('end of maze', {player_num: player.number, player_score: player.score});
-		document.getElementById("bar-1").style.width = "100%";
+		document.getElementById("game__current-progress--number--1").style.width = "100%";
     player.dx = 0;
     player.dy = 0;
-		document.getElementById("btndown").style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+		document.getElementById("game__control-button--down").style.backgroundColor = "rgba(255, 255, 255, 0.5)";
 		return;
 	}
 
   if (player.y < 3 && player.number == 2) {
     socket.emit('end of maze', {player_num: player.number, player_score: player.score});
-		document.getElementById("bar-2").style.width = "100%";
+		document.getElementById("game__current-progress--number--2").style.width = "100%";
     player.dx = 0;
     player.dy = 0;
-		document.getElementById("btnup").style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+		document.getElementById("game__control-button--up").style.backgroundColor = "rgba(255, 255, 255, 0.5)";
 		return;
 	}
 
@@ -243,7 +243,7 @@ function calculateDist(pointx, pointy) {
 
 function renderBar(num, pointX, pointY) {
   percentage = calculateDist(pointX, pointY);
-  $('#bar-' + num).css('width', percentage + '%');
+  $('#game__current-progress--number--' + num).css('width', percentage + '%');
 }
 
 function getInformation() {
@@ -261,28 +261,28 @@ function processKey(e) {
 	if (e.keyCode == 38) {
 		e.preventDefault();
 		player.dy = -1;
-		document.getElementById("btnup").style.backgroundColor = "rgba(255, 255, 255, 1)";
+		document.getElementById("game__control-button--up").style.backgroundColor = "rgba(255, 255, 255, 1)";
 	}
 
 	// DOWN
 	if (e.keyCode == 40) {
 		e.preventDefault();
 		player.dy = 1;
-		document.getElementById("btndown").style.backgroundColor = "rgba(255, 255, 255, 1)";
+		document.getElementById("game__control-button--down").style.backgroundColor = "rgba(255, 255, 255, 1)";
 	}
 
 	// LEFT
 	if (e.keyCode == 37) {
 		e.preventDefault();
 		player.dx = -1;
-		document.getElementById("btnleft").style.backgroundColor = "rgba(255, 255, 255, 1)";
+		document.getElementById("game__control-button--left").style.backgroundColor = "rgba(255, 255, 255, 1)";
 	}
 
 	// RIGHT
 	if (e.keyCode == 39) {
 		e.preventDefault();
 		player.dx = 1;
-		document.getElementById("btnright").style.backgroundColor = "rgba(255, 255, 255, 1)";
+		document.getElementById("game__control-button--right").style.backgroundColor = "rgba(255, 255, 255, 1)";
 	}
 }
 
@@ -312,53 +312,53 @@ function checkForCollision() {
 	return false;
 }
 
-restart.onclick = function () {
+$('#control-panel__button--new-game').on("click", function () {
   player.dx = 0;
 	player.dy = 0;
   setMaze(2);
   socket.emit('reset coordanates');
-};
+});
 
 function controlButtons() {
   function setOpacity(id, opacity) {
     document.getElementById(id).style.backgroundColor = 'rgba(255, 255, 255,' + opacity + ')';
   }
 
-  btnright.addEventListener("mouseover", function() {setOpacity('btnright', 1);});
-	btnleft.addEventListener("mouseover", function () {setOpacity('btnleft', 1);});
-	btnup.addEventListener("mouseover", function () {setOpacity('btnup', 1);});
-	btndown.addEventListener("mouseover", function () {setOpacity('btndown', 1);});
+  $('#game__control-button--right').on("mouseover", function() {setOpacity('game__control-button--right', 1);});
+	$('#game__control-button--left').on("mouseover", function () {setOpacity('game__control-button--left', 1);});
+	$('#game__control-button--up').on("mouseover", function () {setOpacity('game__control-button--up', 1);});
+	$('#game__control-button--down').on("mouseover", function () {setOpacity('game__control-button--down', 1);});
 
-  btnup.addEventListener("mousedown", function() {player.dy = -1;});
-	btnleft.addEventListener("mousedown", function() {player.dx = -1;});
-  btndown.addEventListener("mousedown", function() {player.dy = 1;});
-  btnright.addEventListener("mousedown", function() {player.dx = 1;});
+  $('#game__control-button--up').on("mousedown", function() {player.dy = -1;});
+	$('#game__control-button--left').on("mousedown", function() {player.dx = -1;});
+  $('#game__control-button--down').on("mousedown", function() {player.dy = 1;});
+  $('#game__control-button--right').on("mousedown", function() {player.dx = 1;});
 
-  btnup.addEventListener("touchstart", function (e) {
-		e.preventDefault(); player.dy = -1; setOpacity('btnup', 1);});
-	btnleft.addEventListener("touchstart", function (e) {
-		e.preventDefault(); player.dx = -1; setOpacity('btnleft', 1);});
-	btndown.addEventListener("touchstart", function (e) {
-		e.preventDefault(); player.dy = 1; setOpacity('btndown', 1);});
-  btnright.addEventListener("touchstart", function (e) {
-		e.preventDefault(); player.dx = 1; setOpacity('btnright', 1);});
+  $('#game__control-button--up').on("touchstart", function (e) {
+		e.preventDefault(); player.dy = -1; setOpacity('game__control-button--up', 1);});
+	$('#game__control-button--left').on("touchstart", function (e) {
+		e.preventDefault(); player.dx = -1; setOpacity('game__control-button--left', 1);});
+	$('#game__control-button--down').on("touchstart", function (e) {
+		e.preventDefault(); player.dy = 1; setOpacity('game__control-button--down', 1);});
+  $('#game__control-button--right').on("touchstart", function (e) {
+		e.preventDefault(); player.dx = 1; setOpacity('game__control-button--right', 1);});
 
-  btnright.addEventListener("mouseup", function() {player.dx = 0;});
-	btnleft.addEventListener("mouseup", function() {player.dx = 0;});
-	btnup.addEventListener("mouseup", function() {player.dy=0;});
-	btndown.addEventListener("mouseup", function() {player.dy=0;});
+  $('#game__control-button--right').on("mouseup", function() {player.dx = 0;});
+	$('#game__control-button--left').on("mouseup", function() {player.dx = 0;});
+	$('#game__control-button--up').on("mouseup", function() {player.dy=0;});
+	$('#game__control-button--down').on("mouseup", function() {player.dy=0;});
 
-  btnright.addEventListener("touchend", function (e) {
-		e.preventDefault(); player.dx = 0; setOpacity('btnright', 0.5);});
-	btnleft.addEventListener("touchend", function (e) {
-		e.preventDefault(); player.dx = 0; setOpacity('btnleft', 0.5);});
-	btnup.addEventListener("touchend", function (e) {
-		e.preventDefault(); player.dy = 0; setOpacity('btnup', 0.5);});
-	btndown.addEventListener("touchend", function (e) {
-		e.preventDefault(); player.dy = 0; setOpacity('btndown', 0.5);});
+  $('#game__control-button--right').on("touchend", function (e) {
+		e.preventDefault(); player.dx = 0; setOpacity('game__control-button--right', 0.5);});
+	$('#game__control-button--left').on("touchend", function (e) {
+		e.preventDefault(); player.dx = 0; setOpacity('game__control-button--left', 0.5);});
+	$('#game__control-button--up').on("touchend", function (e) {
+		e.preventDefault(); player.dy = 0; setOpacity('game__control-button--up', 0.5);});
+	$('#game__control-button--down').on("touchend", function (e) {
+		e.preventDefault(); player.dy = 0; setOpacity('game__control-button--down', 0.5);});
 
-  btnright.addEventListener("mouseout", function() {setOpacity('btnright', 0.5);});
-	btnleft.addEventListener("mouseout", function () {setOpacity('btnleft', 0.5);});
-	btnup.addEventListener("mouseout", function () {setOpacity('btnup', 0.5);});
-	btndown.addEventListener("mouseout", function () {setOpacity('btndown', 0.5);});
+  $('#game__control-button--right').on("mouseout", function() {setOpacity('game__control-button--right', 0.5);});
+	$('#game__control-button--left').on("mouseout", function () {setOpacity('game__control-button--left', 0.5);});
+	$('#game__control-button--up').on("mouseout", function () {setOpacity('game__control-button--up', 0.5);});
+	$('#game__control-button--down').on("mouseout", function () {setOpacity('game__control-button--down', 0.5);});
 }

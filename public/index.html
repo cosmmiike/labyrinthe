@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,66 +8,64 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="header-wrap">
-		<h1>LABYRINTHE</h1>
-	</div>
+	<h1 class="header">LABYRINTHE</h1>
 
-	<div class="wrap">
+	<div class="game__wrap">
 		<div class="game">
-			<div class="infopanel">
-				<h2>JOUEUR 1</h2>
-				<h3 id="j1_name"></h3>
-				<span id="compte-1" class="compte">0</span>
-				<span class="compte-souligne">points</span>
-				<div class="progress-bar">
-					<div id="bar-1" class="cur-progess-line">
+			<div class="game__infopanel">
+				<p class="game__player-number">JOUEUR 1</p>
+				<p class="game__player-name" id="game__player-name--number--1"></p>
+				<span class="game__player-score" id="game__player-score--number--1" >0</span>
+				<span class="game__player-score-text">points</span>
+				<div class="game__progress-bar">
+					<div class="game__current-progress" id="game__current-progress--number--1">
 						<span></span>
 					</div>
 				</div>
 			</div>
 
-			<div class="labyrinthe">
-        <div id="wait-message"></div>
-        <div id="rival_point"></div>
-        <div id="player_point"></div>
-				<canvas id="canvas"></canvas>
-				<div class="control-buttons">
-					<div class="ctrl-btn-row">
-						<div class="ctrl-btn-hidden"><span></span></div>
-						<div class="ctrl-btn" id="btnup"></div>
-						<div class="ctrl-btn-hidden"><span></span></div>
+			<div class="game__maze">
+        <div class="game__message" id="game__message--wait-message"></div>
+        <div class="game__player-point" id="game__player-point--player"></div>
+        <div class="game__player-point" id="game__player-point--rival"></div>
+				<canvas id="game__canvas"></canvas>
+				<div class="game__control-buttons">
+					<div class="game__control-buttons-row">
+						<div class="game__control-button--plug"><span></span></div>
+						<div class="game__control-button" id="game__control-button--up"></div>
+						<div class="game__control-button--plug"><span></span></div>
 					</div>
-					<div class="ctrl-btn-row">
-						<div class="ctrl-btn" id="btnleft"></div>
-						<div class="ctrl-btn" id="btndown"></div>
-						<div class="ctrl-btn" id="btnright"></div>
+					<div class="game__control-buttons-row">
+						<div class="game__control-button" id="game__control-button--left"></div>
+						<div class="game__control-button" id="game__control-button--down"></div>
+						<div class="game__control-button" id="game__control-button--right"></div>
 					</div>
 				</div>
 			</div>
 
-			<div class="infopanel">
-				<h2>JOUEUR 2</h2>
-				<h3 id="j2_name"></h3>
-				<span id="compte-2" class="compte">0</span>
-				<span class="compte-souligne">points</span>
-				<div class="progress-bar">
-					<div id="bar-2" class="cur-progess-line">
+      <div class="game__infopanel">
+				<p class="game__player-number">JOUEUR 2</p>
+				<p class="game__player-name" id="game__player-name--number--2"></p>
+				<span class="game__player-score" id="game__player-score--number--2" >0</span>
+				<span class="game__player-score-text">points</span>
+				<div class="game__progress-bar">
+					<div class="game__current-progress" id="game__current-progress--number--2">
 						<span></span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="btn-wrap">
-		<button type="button" name="button" id="restart">NEW GAME</button>
+
+	<div class="control-panel">
+		<button class="control-panel__button" type="button" name="control-panel__button--new-game" id="control-panel__button--new-game">NEW GAME</button>
 	</div>
 	<div class="copyright">
-		<span><b>Mikhail Shaymardanov</b> - Ecole Centrale de Lyon - 2018</span>
+		<p class="copyright__message"><b>Mikhail Shaymardanov</b> - Ecole Centrale de Lyon - 2018</p>
 	</div>
 
-  <script type="text/javascript" src="socket.io/socket.io.js"></script>
-  <script type="text/javascript" src="js/libs/jquery-3.3.1.min.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
-  <!-- <script type="text/javascript" src="js/game.js"></script> -->
+  <script src="socket.io/socket.io.js"></script>
+  <script src="js/libs/jquery-3.3.1.min.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
